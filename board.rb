@@ -20,15 +20,20 @@ class Board
 
   def winner?
     return false unless @last_move
-    return true if winner_vertical?
     return true if winner_horizontal?
-    return true if winner_diagonal?
+    return true if winner_vertical?
+    return true if winner_up_diagonal?
+    return true if winner_down_diagonal?
+
     false
   end
 
   private
-  def winner_diagonal?
-    return true if directional_count(column: -1, row: -1) + directional_count(column: +1, row: +1) >= 3
+  def winner_up_diagonal?
+    directional_count(column: -1, row: -1) + directional_count(column: +1, row: +1) >= 3
+  end
+
+  def winner_down_diagonal?
     directional_count(column: -1, row: +1) + directional_count(column: +1, row: -1) >= 3
   end
 
@@ -42,7 +47,8 @@ class Board
 
   def directional_count(direction)
     count = 0
-    cursor = {row: @last_move[:row], column: @last_move[:column]}
+    cursor = move_cursor(@last_move, direction)
+
     while within_bounds?(cursor)
       piece = @columns[cursor[:column]][cursor[:row]]
       if piece == @last_move[:piece]
@@ -50,10 +56,16 @@ class Board
       else
         return count
       end
-      cursor[:row] = cursor[:row] + direction[:row]
-      cursor[:column] = cursor[:column] + direction[:column]
+      cursor = move_cursor(cursor, direction)
     end
     count
+  end
+
+  def move_cursor(cursor, direction)
+    {
+      row: cursor[:row] + direction[:row],
+      column: cursor[:column] + direction[:column]
+    }
   end
 
   def within_bounds?(cursor)

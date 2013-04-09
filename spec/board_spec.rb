@@ -50,7 +50,7 @@ describe Board do
     board.drop(:o, 1)
     board.drop(:o, 1)
 
-    board.drop(:x, 0)
+    board.drop(:x, 4)
     board.drop(:x, 2)
     board.drop(:x, 3)
     board.drop(:x, 1)
