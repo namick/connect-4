@@ -1,70 +1,23 @@
 require 'spec_helper'
-require './board'
 
 describe Board do
   let (:board) { Board.new }
 
-  it "can drop a piece onto a column" do
+  it "knows last drop coordinate" do
     board.drop(:x, 0)
 
-    expect(board.columns.first).to eq([:x])
+    expect(board.last_x).to eq(0)
+    expect(board.last_y).to eq(0)
   end
 
-  it "detects a vertical win" do
-    4.times { board.drop(:x, 0) }
+  it "knows the color of any coordinate" do
+    board.drop(:red, 0)
+    board.drop(:black, 4)
+    board.drop(:red, 4)
 
-    expect(board.winner?).to be_true
-  end
-
-  it "reports false for no vertical win" do
-    expect(board.winner?).to be_false
-  end
-
-  it "detects a horizontal win" do
-    4.times {|index| board.drop(:x, index) }
-
-    expect(board.winner?).to be_true
-  end
-
-  it "detects a up diagonal win" do
-    board.drop(:o, 1)
-    board.drop(:o, 2)
-    board.drop(:o, 2)
-    board.drop(:o, 3)
-    board.drop(:o, 3)
-    board.drop(:o, 3)
-
-    board.drop(:x, 0)
-    board.drop(:x, 2)
-    board.drop(:x, 3)
-    board.drop(:x, 1)
-
-    expect(board.winner?).to be_true
-  end
-
-  it "detects a down diagonal win" do
-    board.drop(:o, 3)
-    board.drop(:o, 2)
-    board.drop(:o, 2)
-    board.drop(:o, 1)
-    board.drop(:o, 1)
-    board.drop(:o, 1)
-
-    board.drop(:x, 4)
-    board.drop(:x, 2)
-    board.drop(:x, 3)
-    board.drop(:x, 1)
-
-    expect(board.winner?).to be_true
-  end
-
-  it "stores last move" do
-    board.drop(:o, 3)
-    board.drop(:x, 3)
-    board.drop(:o, 3)
-
-    expect(board.last_move[:piece]).to eq(:o)
-    expect(board.last_move[:column]).to eq(3)
-    expect(board.last_move[:row]).to eq(2)
+    expect(board.color_of(0, 0)).to eq(:red)
+    expect(board.color_of(4, 0)).to eq(:black)
+    expect(board.color_of(4, 1)).to eq(:red)
+    expect(board.color_of(5, 5)).to be_nil
   end
 end

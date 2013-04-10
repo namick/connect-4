@@ -1,4 +1,6 @@
 require './board'
+require './four_detector'
+require './position'
 
 class Game
   def initialize
@@ -20,12 +22,12 @@ class Game
   def print_board
     puts " | " + (0..6).to_a.join(' | ') + " |"
     (0..5).to_a.reverse.each do |row|
-      @board.columns.each do |column|
+      @board.grid.each do |column|
         print_position(column[row])
       end
       print " | \n"
     end
-    puts "______________________________"
+    puts " ______________________________"
   end
 
   def print_position(position)
